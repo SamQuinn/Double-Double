@@ -83,7 +83,7 @@ public class Course {
 			//To print the sections, there needs to be a specific toString() method
 			//in the CourseComponent class
 			for(int i = 0; i < this.courseSections.length; i++){
-				CourseComponent.toString(this.courseSections.get(i));
+				new CourseComponent.toString(this.courseSections.get(i));
 			}
 		}
 	}
