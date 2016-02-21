@@ -1,6 +1,6 @@
 # Double-Double
 Term Project for CPSC101
-@authors Sam Kelly, Rui Song, Erik Searle, Shawn 
+@authors Sam Kelly, Rui Song, Erik Searle, Scott 
 
 New Classes: 
 -Course Component
