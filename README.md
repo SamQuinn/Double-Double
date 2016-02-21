@@ -63,3 +63,8 @@ object constructor
 -course components create meetings
 -meetings create blocks
 
+Division of Labour:
+Erik: MasterSchedule
+Sam: Course
+Ray: Meeting, MeetingTime, Block
+Scott: CourseComponent, Professor, Location
