@@ -1,3 +1,8 @@
+/**
+ * 
+ * @author Ray
+ * @version 1.0
+ */
 
 import java.text.DecimalFormat;
 
