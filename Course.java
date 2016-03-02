@@ -5,8 +5,8 @@ import java.util.*;
  */
 
 /**
- * @author Sam Kelly (Updated by Erik Searle)
- * Version Feb 28/2016 1.0
+ * @author Sam Kelly (Updated by Erik Searle)(Updated by Sam Kelly)
+ * Version Mar 1/2016 V1.0
  */
 public class Course {
 	//defines new and unique course names for each individual course object
@@ -15,8 +15,8 @@ public class Course {
 	//used to count the number of courseComponent objects created in a Course 
 	private int components = 0;
 	
-	//stores all components of a course in a linked list
-	private List<CourseComponent> courseSections = new LinkedList<CourseComponent>();
+	//stores all components of a course in an array list
+	private ArrayList<CourseComponent> courseSections = new ArrayList<CourseComponent>();
 	
 	//zero argument constructor, so that the expected behavior 
 	//is known when a Course object is created without a specified argument
@@ -29,12 +29,47 @@ public class Course {
 	public Course(ArrayList<String[]> sections){
 		setName(sections.get(0)[0]);
 		
-		//creates a course component for every line in the course sections data,
-		//and adds the course component object to the linked list of 
-		//components for the course
-		for (int i = 0; i < sections.size(); i++) {
-			courseSections.add(new CourseComponent(sections.get(i)));
-			components += 1;
+		/* Calls the method to create the CourseComponent objects that will
+		 * be part of the Course object
+		 */
+		divideSections(sections);
+	}
+	
+	//divides Course into sections and creates CourseComponents
+	public void divideSections(ArrayList<String[]> s){
+		//Creates an array to store the working data for creating a CourseComponent
+		ArrayList<String[]> workingComponentList = new ArrayList<String[]>();
+		
+		//ID and compare are used to determine if lines are part of the same CourseComponent
+		//Ex: if they are both equal to A1, they are both part of the lecture 1 CourseComponent
+		String ID;
+		String compare;
+		
+		//initializes ID as the first component identity for comparison
+		ID = s.get(0)[1];
+		
+		//loops through every "line" (String[]) of course meeting data
+		for(int i = 0; i < s.size(); i++){
+			//checks if the current "line" is part of the same CourseComponent
+			//example: "A1" == "A1", or "A1" != "L2"
+			compare = s.get(i)[1];
+			if(compare.equals(ID)){
+				//if the line is part of the current CourseComponent set, the line
+				//is added to the working set of data that will be used to eventually
+				//create the CourseComponent
+				workingComponentList.add(s.get(i));
+			} else {
+				//if the line is not part of the current CourseComponent, the data
+				//for the current component is considered complete, and the working set array
+				//will be used to create a new CourseComponent, which will be immediately added
+				//to the Course object's ArrayList of CourseComponents
+				 this.courseSections.addComponent(new CourseComponent(workingComponentList));
+				 //changes the current CourseComponent identity for comparison
+				ID = s.get(i)[1];
+				//continues the for loop right back at the line that was just checked, so that
+				//no lines are skipped
+				i -= 1;
+			}
 		}
 	}
 	
@@ -62,10 +97,12 @@ public class Course {
 	
 	public void removeComponent(CourseComponent c){
 		this.courseSections.remove(c);
+		components -= 1;
 	}
 	
 	public void addComponent(CourseComponent c){
 		this.courseSections.add(c);
+		components += 1;
 	}
 	
 	//toString() method for a course object
