@@ -23,6 +23,21 @@ public class Professor
 	}
 
 
+	//gets the Professor's name
+	public String getProfessorName()
+	{
+		return name;
+	}
+
+
+	//return a Professor object
+	//not totally sure if this method is needed but adding it can't hurt ;)
+	public Professor getProfessor()
+	{
+		return this;
+	}
+
+
 	//toString which returns the prof's name
 	public String toString()
 	{
