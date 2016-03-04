@@ -1,16 +1,19 @@
-
+/**
+ * 
+ */
+package version1;
 import java.util.*;
 /**
  * @author Sam Kelly
- *March 4/2016 V1.0
+ *Mar 4/2016 V1.1
  */
 public class CourseComponent {
 	private String componentName;
 	private ArrayList<Meeting> allMeetings;
-	public static int meetings = 0;
+	private int meetings = 0;
 	
 	
-	public void CourseComponent(ArrayList<String[]> section){
+	public CourseComponent(ArrayList<String[]> section){
 		this.componentName = section.get(0)[1];
 		
 		for(int i = 0; i < section.size(); i ++){
@@ -42,6 +45,18 @@ public class CourseComponent {
 		} else {
 			System.out.println("This course component does not contain the meeting specified.");
 		}
-		
+	}
+	
+	public String toString(){
+		String course = "";
+		course += this.componentName;
+		if(meetings > 0){
+			course += " Has " + this.meetings + " meetings.";
+			course += "They are: " + "\n";
+
+			for(int i = 0; i < this.allMeetings.size(); i++){
+				new Meeting.toString(this.allMeetings.get(i));
+			}
+		}
 	}
 }
