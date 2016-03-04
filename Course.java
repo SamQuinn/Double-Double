@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * @author Sam Kelly (Updated by Erik Searle)(Updated by Sam Kelly)
- * Version Mar 1/2016 V1.0
+ * Version Mar 4/2016 V1.0
  */
 public class Course {
 	//defines new and unique course names for each individual course object
@@ -69,6 +69,9 @@ public class Course {
 				//continues the for loop right back at the line that was just checked, so that
 				//no lines are skipped
 				i -= 1;
+				
+				workingComponentList.clear();
+				//empties the array list of all its components, so that it wont add the same components on the next loop through
 			}
 		}
 	}
