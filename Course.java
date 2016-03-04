@@ -1,4 +1,3 @@
-
 import java.util.*;
 /**
  * 
@@ -63,7 +62,7 @@ public class Course {
 				//for the current component is considered complete, and the working set array
 				//will be used to create a new CourseComponent, which will be immediately added
 				//to the Course object's ArrayList of CourseComponents
-				 this.courseSections.addComponent(new CourseComponent(workingComponentList));
+				 this.addComponent(new CourseComponent(workingComponentList));
 				 //changes the current CourseComponent identity for comparison
 				ID = s.get(i)[1];
 				//continues the for loop right back at the line that was just checked, so that
@@ -99,8 +98,10 @@ public class Course {
 	}
 	
 	public void removeComponent(CourseComponent c){
-		this.courseSections.remove(c);
-		components -= 1;
+		if(this.courseSections.contains(c)){
+			this.courseSections.remove(c);
+			components -= 1;
+		} 
 	}
 	
 	public void addComponent(CourseComponent c){
@@ -117,7 +118,7 @@ public class Course {
 			course += "They are: " + "\n";
 			//To print the sections, there needs to be a specific toString() method
 			//in the CourseComponent class
-			for(int i = 0; i < this.courseSections.length; i++){
+			for(int i = 0; i < this.courseSections.size(); i++){
 				new CourseComponent.toString(this.courseSections.get(i));
 			}
 		}
