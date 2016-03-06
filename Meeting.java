@@ -84,5 +84,13 @@ public class Meeting {
 	public boolean checkForced(){
 		return checkForced;
 	}
+	public boolean checkExam(){
+		if(startDate.charAt(6) == '1' && endDate.charAt(6) == '4'){
+			return false;
+		}
+		else{ 
+			return true;
+		}
+	}
 	
 }
