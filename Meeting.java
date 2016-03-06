@@ -1,61 +1,86 @@
-import java.util.*;
 
-import jdk.nashorn.internal.ir.Block;
+import java.util.*;
 
 public class Meeting {
 	
 	private String professor;
-	private String room;
-	private String meetingTime;
-	private ArrayList<Block> blocks;
+	private String roomNum;
+	private String buildingId;
+	private String startTime;
+	private String duration;
+	private String day;
+	private String startDate;
+	private String endDate;
+	private String courseId;
+	private String componentId;
+	boolean checkForced = false;
 	
 	
 	
-	public Meeting(ArrayList<Meeting> allMeetings){
+	public Meeting(String[] sa){
 		
-		for(int i = 0; i < section.size(); i ++){
-			blocks.add(new Block(allMeetings.get(i)));
+		if(sa[4].equals("")){
+			courseId = sa[0];
+			componentId = sa[1];
+			startDate = sa[2];
+			endDate = sa[3];
+			day = sa[7];
+			startTime = sa[8];
+			duration = sa[9];
+			buildingId = sa[10];
+			roomNum = sa[11];
+			professor = sa[12];
+		}
+		else{
+			courseId = sa[0];
+			componentId = sa[1];
+			startDate = sa[2];
+			endDate = sa[3];
+			day = sa[4];
+			startTime = sa[5];
+			duration = sa[6];
+			buildingId = sa[10];
+			roomNum = sa[11];
+			professor = sa[12];
+			
+			checkForced = true;
+			
 		}
 		
 	}
 	
-	public void setProfessor(Professor p){
-		professor = p.getProfessorName();
+	public String getCourseId(){
+		return courseId;
 	}
-	
+	public String getComponentId(){
+		return componentId;
+	}
+	public String getStartDate(){
+		return startDate;
+	}
+	public String getEndDate(){
+		return endDate;
+	}
+	public String getDayOfWeek(){
+		return day;
+	}
+	public String getStartTime(){
+		return startTime;
+	}
+	public String getDuration(){
+		return duration;
+	}
+	public String getBuildingId(){
+		return buildingId;
+	}
+	public String getRoomNumber(){
+		return roomNum;
+	}
 	public String getProfessor(){
 		return professor;
 	}
-	
-	public void setRoom(Room r){
-		room = r.getFullRoomNum();
+	public boolean checkForced(){
+		return checkForced;
 	}
 	
-	public String getRoom(){
-		return room;
-	}
-	
-	public void setMeetingTime(MeetingTime mt){
-		meetingTime = mt.toString();
-	}
-	
-	public String getMeetingTime(){
-		return meetingTime;
-	}
-	
-	public void addBlock(Block b){
-		blocks.add(b);
-	}
-	
-	public void removeBlock(Block b){
-		blocks.remove(b);
-	}
-	
-	public String toString(){
-		for (int i =0;i<blocks.size();i++){
-			return professor + room + meetingTime + new Block.toString(blocks.get(i));
-		}
-	}
-
 }
-
