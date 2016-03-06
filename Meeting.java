@@ -13,7 +13,7 @@ public class Meeting {
 	private String endDate;
 	private String courseId;
 	private String componentId;
-	boolean checkForced = false;
+	boolean checkForced;
 	
 	
 	
@@ -30,6 +30,8 @@ public class Meeting {
 			buildingId = sa[10];
 			roomNum = sa[11];
 			professor = sa[12];
+			
+			checkForced = false;
 		}
 		else{
 			courseId = sa[0];
