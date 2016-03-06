@@ -51,10 +51,10 @@ public class Meeting {
 		
 	}
 	
-	public String getCourseId(){
+	public String getCourseID(){
 		return courseId;
 	}
-	public String getComponentId(){
+	public String getComponentID(){
 		return componentId;
 	}
 	public String getStartDate(){
@@ -72,7 +72,7 @@ public class Meeting {
 	public String getDuration(){
 		return duration;
 	}
-	public String getBuildingId(){
+	public String getBuildingID(){
 		return buildingId;
 	}
 	public String getRoomNumber(){
