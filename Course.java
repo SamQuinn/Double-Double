@@ -123,4 +123,12 @@ public class Course {
 			}
 		}
 	}
+	
+	public ArrayList<Block> getBlock(){
+		for(int i=0; i<meetings.size(); i++){
+			String startTime = meetings.get(i).getStartTime();
+			String duration = meeting.get(i).getDuration();
+			Int numberOfBlocks = 
+		}
+	}
 }
