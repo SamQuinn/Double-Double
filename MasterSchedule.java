@@ -51,7 +51,7 @@ public class MasterSchedule{
 	//This method creates the arraylist of course objects by grouping all the lines with the same 
 	//course name into an ArrayList<String[]> and passing that to the Course constructor
 	private ArrayList<Course> courseCreator(){
-		ArrayList<String[]> oneCourse = new ArrayList<String[]>();
+		ArrayList<Meeting> oneCourse = new ArrayList<Meeting>();
 		ArrayList<Course> courses = new ArrayList<Course>();
 		String currentName = "placeholder";
 		int currentNumber = 0;
@@ -64,8 +64,9 @@ public class MasterSchedule{
 		for(int i=0; i<myLines.size(); i++){
 			if(!myLines.get(i)[0].equals(currentName)){
 				for(int j=currentNumber; j<i; j++){
-					oneCourse.add(myLines.get(j));
+					oneCourse.add(new Meeting(myLines.get(j));
 				}
+				
 				courses.add(new Course(oneCourse));
 				oneCourse.clear();
 				currentName = myLines.get(i)[0];
