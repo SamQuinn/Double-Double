@@ -5,8 +5,15 @@ public class Course {
 	private ArrayList<Meeting> meetings;
 	
 	public Course(ArrayList<Meeting> m){
-		meetings =  m;
+		meetings = new ArrayList<Meeting>(m);
+		
 	}
+	
+	public String getCourseID(){
+		return meetings.get(0).getCourseID();
+	}
+
+	public ArrayList<Meeting> getMeetings(){return meetings; }
 	
 	//Creates an ArrayList of block objects for every meeting in the course to be passed to the GUI.
 	public ArrayList<Block> getBlocks(){
@@ -35,7 +42,6 @@ public class Course {
 		return temp;
 	}
 	
-	//Creates an arraylist of just the lecture blocks
 	public ArrayList<Block> getLectureBlocks(){
 		ArrayList<Block> temp = new ArrayList<Block>();
 		for(int i=0; i<meetings.size(); i++){
@@ -64,7 +70,6 @@ public class Course {
 		return temp;
 	}
 	
-	//Creates an arraylist of just the lab blocks
 	public ArrayList<Block> getLabBlocks(){
 		ArrayList<Block> temp = new ArrayList<Block>();
 		for(int i=0; i<meetings.size(); i++){
@@ -93,7 +98,6 @@ public class Course {
 		return temp;
 	}
 	
-	//Creates an arraylist of just the tutorial blocks
 	public ArrayList<Block> getTutorialBlocks(){
 		ArrayList<Block> temp = new ArrayList<Block>();
 		for(int i=0; i<meetings.size(); i++){
@@ -133,4 +137,3 @@ public class Course {
 		return number;
 	}
 }
-
