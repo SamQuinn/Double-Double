@@ -92,5 +92,8 @@ public class Meeting {
 			return true;
 		}
 	}
+	public String toString(){
+		return (courseId + " - " + componentId + ", " + startTime + ", " + duration + ", " + roomNum + ", " + professor);
+	}
 	
 }
