@@ -1,7 +1,8 @@
+
 import java.util.ArrayList;
 
 
-public class Prof{
+public class Prof implements Comparable<String>{
 	
 	private ArrayList<Meeting> myMeetings;
 	private String myName;
@@ -21,5 +22,9 @@ public class Prof{
 
 	public String toString(){
 		return myName;
+	}
+	
+	public String compareTo(Prof other){
+		 this.getName().compareTo(other.getName());	
 	}
 }
