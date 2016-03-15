@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Room{
+public class Room implements Comparable<Room>{
 
 	private ArrayList<Meeting> myMeetings;
 	private String myRoomNumber;
@@ -21,4 +21,9 @@ public class Room{
 	public String toString(){
 		return myRoomNumber;
 	}
+
+	public int compareTo(Room other){
+		return this.getRoomNumber().compareTo(other.getRoomNumber());
+		}
+
 }
