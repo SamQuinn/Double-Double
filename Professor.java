@@ -1,47 +1,25 @@
-/**
-*
-*Professor class for Final Project
-*
-*@author Scott Howes
-*@version 22/02/2016
-*
-*/
+import java.util.ArrayList;
 
 
-
-public class Professor
-{
-
-	//class variable(s)
-	private String name = "";
-
-
-	//contructor which only takes a name
-	public Professor(String name)
-	{
-		this.name = name;
-	}
-
-
-	//gets the Professor's name
-	public String getProfessorName()
-	{
-		return name;
-	}
-
-
-	//return a Professor object
-	//not totally sure if this method is needed but adding it can't hurt ;)
-	public Professor getProfessor()
-	{
-		return this;
-	}
-
-
-	//toString which returns the prof's name
-	public String toString()
-	{
-		return name;
-	}
+public class Prof{
 	
+	private ArrayList<Meeting> myMeetings;
+	private String myName;
+
+	public Prof(ArrayList<Meeting> a, String b){
+		myMeetings = new ArrayList<Meeting>(a);
+		myName = b;
+	}
+
+	public String getName(){
+		return myName;
+	}
+
+	public ArrayList<Meeting> getMeetings(){
+		return myMeetings;
+	}
+
+	public String toString(){
+		return myName;
+	}
 }
