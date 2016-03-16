@@ -1,4 +1,3 @@
-
 /**
 *@Author ErikSearle
 *@Version February-27-2016
@@ -102,21 +101,25 @@ public class MasterSchedule{
 							if(myMeetings.get(j).getProfessor().equals(currentProf)) oneProf.add(myMeetings.get(j));
 						}
 						profs.add(new Prof(oneProf, currentProf));
+						oneProf.clear();
 					}
-					for(int h=0; h<profs.size(); h++){
-						if(myMeetings.get(i).getProfessor().equals(profs.get(h).getName())) break;
-						else if(h==profs.size()-1){
-							currentProf = myMeetings.get(i).getProfessor();
-							for(int j=i; j<myMeetings.size(); j++){
-								if(myMeetings.get(j).getProfessor().equals(currentProf)) oneProf.add(myMeetings.get(j));
-							}
-							profs.add(new Prof(oneProf, currentProf));
-						}							
+					else{
+						for(int h=0; h<profs.size(); h++){
+							if(myMeetings.get(i).getProfessor().equals(profs.get(h).getName())) break;
+							else if(h==profs.size()-1){
+								currentProf = myMeetings.get(i).getProfessor();
+								for(int j=i; j<myMeetings.size(); j++){
+									if(myMeetings.get(j).getProfessor().equals(currentProf)) oneProf.add(myMeetings.get(j));
+								}
+								profs.add(new Prof(oneProf, currentProf));
+								oneProf.clear();
+							}							
+						}
 					}
 				}
 			}
 		}
-//		Collections.sort(profs);
+		Collections.sort(profs);
 		return profs;
 	}
 
@@ -133,20 +136,24 @@ public class MasterSchedule{
 							if(myMeetings.get(j).getRoomNumber().equals(currentRoom)) oneRoom.add(myMeetings.get(j));
 						}
 						rooms.add(new Room(oneRoom, currentRoom));
+						oneRoom.clear();
 				}
-				for(int h=0; h<rooms.size(); h++){
-					if(myMeetings.get(i).getRoomNumber().equals(rooms.get(h).getRoomNumber())) break;
-					else if(h==rooms.size()-1){
-						currentRoom = myMeetings.get(i).getRoomNumber();
-						for(int j=i; j<myMeetings.size(); j++){
-							if(myMeetings.get(j).getRoomNumber().equals(currentRoom)) oneRoom.add(myMeetings.get(j));
-						}
-						rooms.add(new Room(oneRoom, currentRoom));
-					}							
+				else{
+					for(int h=0; h<rooms.size(); h++){
+						if(myMeetings.get(i).getRoomNumber().equals(rooms.get(h).getRoomNumber())) break;
+						else if(h==rooms.size()-1){
+							currentRoom = myMeetings.get(i).getRoomNumber();
+							for(int j=i; j<myMeetings.size(); j++){
+								if(myMeetings.get(j).getRoomNumber().equals(currentRoom)) oneRoom.add(myMeetings.get(j));
+							}
+							rooms.add(new Room(oneRoom, currentRoom));
+							oneRoom.clear();
+						}							
+					}
 				}
 			}
 		}
-//		Collections.sort(rooms);
+		Collections.sort(rooms);
 		return rooms;
 	}
 
