@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.*;
+import java.io.*;
 
 public class FileChooser extends JFrame
 {
@@ -69,9 +71,19 @@ public class FileChooser extends JFrame
 			@Override public void actionPerformed(ActionEvent e) 
 			{
 				filepath = jtf.getText();
-				setVisible( false );
+				boolean fileWorks = true;
+				try{
+					File file = new File(getFilePath());
+					Scanner sc = new Scanner(file);
+				}catch(FileNotFoundException f){
+					fileWorks = false;
+				}
+				if(fileWorks){
+					setVisible( false );
 
-				gui = new Gui( getFilePath() );
+					gui = new Gui( getFilePath() );
+				}
+				else setFilePathText("File Path Incorrect");
 			}
 		});
 		
@@ -132,6 +144,10 @@ public class FileChooser extends JFrame
 	public String getFilePath()
 	{
 		return filepath;
+	}
+
+	private void setFilePathText(String a){
+		jtf.setText(a);
 	}
 	
 }
