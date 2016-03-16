@@ -85,15 +85,15 @@ public class Meeting {
 		return checkForced;
 	}
 	public boolean checkExam(){
-		if(startDate.charAt(6) == '1' && endDate.charAt(6) == '4'){
-			return false;
+		if(startDate.charAt(6) == endDate.charAt(6)){
+			return true;
 		}
 		else{ 
-			return true;
+			return false;
 		}
 	}
 	public String toString(){
-		return (courseId + " - " + componentId + ", " + startTime + ", " + duration + ", " + roomNum + ", " + professor);
+		return (courseId + " - " + componentId + "," + roomNum + ", " + professor);
 	}
 	
 }
