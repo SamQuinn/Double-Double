@@ -80,7 +80,7 @@ public class Gui extends JFrame{
 	private JLabel hour13;
 	private JLabel hour14;
 	//Array of Labels for where courses go
-	private JLabel[][] labelArray = new JLabel[28][7];
+	private BlockLabel[][] labelArray = new BlockLabel[28][7];
 	//dimensions for those labels
 	private JButton button;
 	private Dimension courseDim = new Dimension( 100, 20 );
@@ -115,7 +115,7 @@ public class Gui extends JFrame{
 		//calling the timetable panel
 		timeTable();
 		//makes the west panel
-		add(new WestPanel(master.getCourses()),BorderLayout.WEST);
+		add(new WestPanel(master.getCourses(),master.getProfs(),master.getRooms()),BorderLayout.WEST);
 		
 		//JFrame Stuff
 		this.setTitle( title );
@@ -123,6 +123,7 @@ public class Gui extends JFrame{
 		this.setSize( width, height );
 		this.setMinimumSize( new Dimension( minWidth, minHeight ) );
 		this.setDefaultCloseOperation( this.EXIT_ON_CLOSE );
+		pack();
 		this.setVisible(true);
 	}
 	
@@ -363,7 +364,9 @@ public class Gui extends JFrame{
 		{
 			for( int j=0; j < 7; j++ )
 			{
-				labelArray[i][j] = new JLabel( "\t\t", SwingConstants.CENTER );
+				labelArray[i][j] = new BlockLabel();
+				labelArray[i][j].setText( "\t\t" );
+				labelArray[i][j].setHorizontalAlignment( SwingConstants.CENTER );
 				labelArray[i][j].setFont( timeTableFont );
 				labelArray[i][j].setBorder( BorderFactory.createLineBorder( borderColor, borderThickness ) );
 				labelArray[i][j].setPreferredSize( courseDim );
@@ -386,72 +389,96 @@ public class Gui extends JFrame{
 	}
 
 		public void addBlocks(ArrayList<Meeting> a){
+			ArrayList<Meeting> meetings = new ArrayList<Meeting>(a);
 			String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 			String[] times = {"08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00"};
 			String[] durations = {"00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00", "04:30", "05:00", "05:30", "06:00", "06:30", "07:00", "07:30", "08:00",};
 			int day = 0;
 			int startTime = 0;
 			int numberOfBlocks = 0;
-			int numberOfNonExams = 0;
-			for(int i=0; i<a.size(); i++){
-				if(!a.get(i).checkExam()) numberOfNonExams++;
+			
+			for(int i=0; i<meetings.size(); i++){
+				if(meetings.get(i).checkExam()){
+					meetings.remove(i);
+					i--;
+				}
 			}
-			for(int i=0; i<numberOfNonExams; i++){
 
+			for(int i=0; i<meetings.size(); i++){
+
+				boolean allreadyAdded = false;
 				for(int j=0; j<days.length; j++){
-					if(days[j].equals(a.get(i).getDayOfWeek())) day = j;
+					if(days[j].equals(meetings.get(i).getDayOfWeek())) day = j;
 				}
 
 				for(int j=0; j<times.length; j++){
-					if(times[j].equals(a.get(i).getStartTime())) startTime = j;
+					if(times[j].equals(meetings.get(i).getStartTime())) startTime = j;
 				}
 
 				for(int j=0; j<durations.length; j++){
-					if(durations[j].equals(a.get(i).getDuration())) numberOfBlocks = j+1;
+					if(durations[j].equals(meetings.get(i).getDuration())) numberOfBlocks = j+1;
 				}
 
 				for(int j=0; j<numberOfBlocks; j++){
-					System.out.println(labelArray[startTime][day].getText());
-					if(j==0){
-						if(labelArray[startTime][day].getText().equals("\t\t")){
-							labelArray[startTime][day].setText(a.get(i).getCourseID());
-							labelArray[startTime][day].setToolTipText(a.get(i).toString());
-							labelArray[startTime][day].setBorder( BorderFactory.createLineBorder( colorArray[2], borderThickness ) );
-							labelArray[startTime][day].setBackground( colorArray[2] );
+					if(!allreadyAdded){
+						if(j==0){
+							allreadyAdded = labelArray[startTime][day].setCustomText(meetings.get(i).getCourseID());
+							if(!allreadyAdded){
+								labelArray[startTime][day].setToolTipText(meetings.get(i).toString());
+								labelArray[startTime][day].setColor();
+							}
 						}
 						else{
-							labelArray[startTime][day].setText(labelArray[startTime][day].getText() + " + " + a.get(i).getCourseID());
-							labelArray[startTime][day].setToolTipText("CONFLICT! " + labelArray[startTime][day].getToolTipText() + " Conflicts With " + a.get(i).toString());
-							labelArray[startTime][day].setBorder( BorderFactory.createLineBorder( colorArray[8], borderThickness ) );
-							labelArray[startTime][day].setBackground( colorArray[8] );
-						}
-					}
-					else{
-						if(labelArray[startTime+j][day].getBackground().equals(colorArray[0])){
-							labelArray[startTime+j][day].setBorder( BorderFactory.createLineBorder( colorArray[2], borderThickness ) );
-							labelArray[startTime+j][day].setBackground( colorArray[2] );
-						}
-						else{
-							labelArray[startTime+j][day].setBorder( BorderFactory.createLineBorder( colorArray[8], borderThickness ) );
-							labelArray[startTime+j][day].setBackground( colorArray[8] );
-						}
-						if(!labelArray[startTime+j][day].getText().equals("\t\t")){
-							labelArray[startTime+j][day].setToolTipText("CONFLICT! " + labelArray[startTime][day].getToolTipText() + " Conflicts With " + a.get(i).toString());
+							labelArray[startTime+j][day].setColor();
 						}
 					}
 				}
 			}
-			repaint();
 		}
 
-		//test stuff
-		/**labelArray[12][2].setText("CPSC101");
-		labelArray[12][2].setBackground( colorArray[7] );
-		labelArray[12][2].setBorder( BorderFactory.createLineBorder( colorArray[7], borderThickness ) );
-		labelArray[13][2].setBackground( colorArray[7] );
-		labelArray[13][2].setBorder( BorderFactory.createLineBorder( colorArray[7], borderThickness ) );
-		labelArray[14][2].setBackground( colorArray[7] );
-		labelArray[14][2].setBorder( BorderFactory.createLineBorder( colorArray[7], borderThickness ) );*/
+		public void removeBlocks(ArrayList<Meeting> a){
+			ArrayList<Meeting> meetings = new ArrayList<Meeting>(a);
+			String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+			String[] times = {"08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00"};
+			String[] durations = {"00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00", "04:30", "05:00", "05:30", "06:00", "06:30", "07:00", "07:30", "08:00",};
+			int day = 0;
+			int startTime = 0;
+			int numberOfBlocks = 0;
+			
+			for(int i=0; i<meetings.size(); i++){
+				if(meetings.get(i).checkExam()){
+					meetings.remove(i);
+					i--;
+				}
+			}
+
+			for(int i=0; i<meetings.size(); i++){
+				for(int j=0; j<days.length; j++){
+					if(days[j].equals(meetings.get(i).getDayOfWeek())) day = j;
+				}
+
+				for(int j=0; j<times.length; j++){
+					if(times[j].equals(meetings.get(i).getStartTime())) startTime = j;
+				}
+
+				for(int j=0; j<durations.length; j++){
+					if(durations[j].equals(meetings.get(i).getDuration())) numberOfBlocks = j+1;
+				}
+
+				for(int j=0; j<numberOfBlocks; j++){
+					if(j==0){
+						labelArray[startTime][day].removeCustomText(meetings.get(i).getCourseID());
+						labelArray[startTime][day].removeToolTipText(meetings.get(i).toString());
+						labelArray[startTime][day].resetColor();
+					}
+					else{
+						labelArray[startTime+j][day].resetColor();
+					}
+				}
+			}
+		}
+
+
 		
 		
 
@@ -459,195 +486,154 @@ public class Gui extends JFrame{
 	
 	
 	//westPanel Panel for the main Frame (this)
-	private class WestPanel extends JPanel
-	{
+private class WestPanel extends JPanel{
+	SpringLayout sl;
+
+	
+	JComboBox courseBox;
+	JComboBox profBox;
+	JComboBox roomBox;
+	JButton addCourseButton;
+	JButton addProfButton;
+	JButton addRoomButton;
+
+	ArrayList<Object> addedObjects;
+	JComboBox removeBox;
+	JButton removeButton;
+
+
+
+	public WestPanel(Object[] a, Object[] b, Object[] c){
+		sl = new SpringLayout();
+		setLayout(sl);
 		
-	private ArrayList<JComboBox> boxes;
-	private ArrayList<JButton> addButtons;
-	private ArrayList<RButton> removeButtons;
-	private Dimension cBDimensions = new Dimension(200, 40);
-	private Dimension jBDimensions = new Dimension(40, 40);
-	private GridBagLayout layout = new GridBagLayout();
-	private GridBagConstraints gbc = new GridBagConstraints();
-	private Object[] courseList;
 
-	public WestPanel(Object[] a) {
-		boxes = new ArrayList<JComboBox>();
-		addButtons = new ArrayList<JButton>();
-		removeButtons = new ArrayList<RButton>();
-		courseList = a;
+		courseBox = new JComboBox(a);
+		profBox = new JComboBox(b);
+		roomBox = new JComboBox(c);
+		addCourseButton = new JButton("Add Course");
+		addProfButton = new JButton("Add Prof");
+		addRoomButton = new JButton("Add Room");
 
-		setLayout(layout);
+		addedObjects = new ArrayList<Object>();
+		addedObjects.add("                     ");
+		removeBox = new JComboBox(addedObjects.toArray());
+		removeBox.setPreferredSize(new Dimension(200,20));
+		removeButton = new JButton("Remove");
 
-		addComboBox();
-		addRemoveButton();
-		addAddButton();
-		addComponents();
+		add(courseBox);
+		add(profBox);
+		add(roomBox);
+		add(addCourseButton);
+		add(addProfButton);
+		add(addRoomButton);
+		add(removeBox);
+		add(removeButton);
+
+		sl.putConstraint(SpringLayout.NORTH,courseBox,10,SpringLayout.NORTH,this);
+		sl.putConstraint(SpringLayout.WEST,courseBox,5,SpringLayout.WEST,this);
+		sl.putConstraint(SpringLayout.WEST,addCourseButton,5,SpringLayout.EAST,courseBox);
+		sl.putConstraint(SpringLayout.NORTH,addCourseButton,9,SpringLayout.NORTH,this);
+		sl.putConstraint(SpringLayout.NORTH,profBox,10,SpringLayout.SOUTH,courseBox);
+		sl.putConstraint(SpringLayout.WEST,profBox,5,SpringLayout.WEST,this);
+		sl.putConstraint(SpringLayout.WEST,addProfButton,5,SpringLayout.EAST,profBox);
+		sl.putConstraint(SpringLayout.NORTH,addProfButton,9,SpringLayout.SOUTH,courseBox);
+		sl.putConstraint(SpringLayout.NORTH,roomBox,10,SpringLayout.SOUTH,profBox);
+		sl.putConstraint(SpringLayout.WEST,roomBox,5,SpringLayout.WEST,this);
+		sl.putConstraint(SpringLayout.NORTH,addRoomButton,9,SpringLayout.SOUTH,profBox);
+		sl.putConstraint(SpringLayout.NORTH,removeBox,200,SpringLayout.SOUTH,roomBox);
+		sl.putConstraint(SpringLayout.NORTH,removeButton,200,SpringLayout.SOUTH,addRoomButton);
+		sl.putConstraint(SpringLayout.WEST,removeBox,5,SpringLayout.WEST,this);
+		sl.putConstraint(SpringLayout.WEST,removeButton,5,SpringLayout.EAST,removeBox);
+
+
+		sl.putConstraint(SpringLayout.WEST,addRoomButton,5,SpringLayout.EAST,roomBox);
+		sl.putConstraint(SpringLayout.EAST,this,5,SpringLayout.EAST,addCourseButton);
+
+		
+		addButtonListeners();
 
 	}
 
-	public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
+
 		super.paintComponent(g2);
+		paintComponents(g2);
+
 	}
 
-	private void addComboBox() {
-		boxes.add(new JComboBox(courseList));
-	}
-
-	// I apologize for this terrible method name -Erik
-	private void addAddButton() {
-		addButtons.add(new AButton(addButtons.size()));
-	}
-
-	private void addRemoveButton() {
-		removeButtons.add(new RButton(removeButtons.size()));
-	}
-
-	private void removeComboBox(int a) {
-		boxes.remove(a);
-	}
-
-	private void removeAddButton(int a) {
-		addButtons.remove(a);
-	}
-
-	private void removeRemoveButton(int a) {
-		removeButtons.remove(a);
-	}
-
-	private void addComponents() {
-		for (int i = 0; i < boxes.size(); i++) {
-			gbc.gridy = i;
-			gbc.gridx = 0;
-			gbc.fill = GridBagConstraints.NONE;
-			gbc.weighty = 0;
-			if(i==boxes.size()-1) gbc.weighty = 1;
-			gbc.anchor = GridBagConstraints.NORTH;
-			add(boxes.get(i), gbc);
-			gbc.gridx = 1;
-			add(addButtons.get(i), gbc);
-			gbc.gridx = 2;
-			add(removeButtons.get(i), gbc);
-		}
-	}
-	private class AButton extends JButton{
-		int index;
-
-		public AButton(int a){
-			super("Add");
-			index = a;
-			addMouseListener(new AddButtonListener());
-		}
-		private class AddButtonListener implements MouseListener {
-			boolean hasBeenClicked = false;
-
-			public void mouseClicked(MouseEvent e) {
-				if (!hasBeenClicked) {
-					//WestPanel specific stuff
-					addComboBox();
-					addAddButton();
-					addRemoveButton();
-					removeAll();
-					addComponents();
-					revalidate();
-					repaint();
-					hasBeenClicked = true;
-
-					//TimeTable specific
-					addBlocks(((Course) boxes.get(index).getSelectedItem()).getMeetings());
+	private void addButtonListeners(){
+		addCourseButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				addBlocks(((Course) courseBox.getSelectedItem()).getMeetings());
+				if(removeBox.getSelectedItem() instanceof String){
+					removeBox.removeItem(removeBox.getSelectedItem());
+				}
+				if(removeBox.getItemCount() == 0){
+					removeBox.addItem((Course) courseBox.getSelectedItem());
+				}
+				for(int i=0; i<removeBox.getItemCount(); i++){
+					if(courseBox.getSelectedItem().equals(removeBox.getItemAt(i))) break;
+					if(i == removeBox.getItemCount()-1) removeBox.addItem((Course) courseBox.getSelectedItem());
 				}
 			}
-
-			public void mousePressed(MouseEvent e) {
-			}
-
-			public void mouseReleased(MouseEvent e) {
-			}
-
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			public void mouseExited(MouseEvent e) {
-			}
-
-		}
-	}
-
-
-	private class RButton extends JButton {
-		int index;
-	
-		public RButton(int b){
-			super("Remove");
-			index = b;
-			addMouseListener(new RemoveButtonListener());
-		}
-	
-		public int getIndex(){
-			return index;
-		}
-		
-		public void shiftUp(){
-			index--;
-		}
-	
-		private class RemoveButtonListener implements MouseListener {
-
-
-			public void mouseClicked(MouseEvent e) {
-				
-				System.out.println(index);
-				if (boxes.size() > 1) {
-					removeComboBox(index);
-					removeAddButton(index);
-					removeRemoveButton(index);
-					removeAll();
-					addComponents();
-					revalidate();
-					repaint();
-					shiftAllUp(index);
+		});
+		addProfButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				addBlocks(((Prof) profBox.getSelectedItem()).getMeetings());
+				if(removeBox.getSelectedItem() instanceof String){
+					removeBox.removeItem(removeBox.getSelectedItem());
 				}
-				else{
-					System.out.println("In");
-					removeComboBox(index);
-					removeAddButton(index);
-					removeRemoveButton(index);
-					addComboBox();
-					addRemoveButton();
-					addAddButton();
-					removeAll();
-					addComponents();
-					revalidate();
-					repaint();
-					//shiftAllUp(index);
+				if(removeBox.getItemCount() == 0){
+					removeBox.addItem((Prof) profBox.getSelectedItem());
 				}
-
+				for(int i=0; i<removeBox.getItemCount(); i++){
+					if(profBox.getSelectedItem().equals(removeBox.getItemAt(i))) break;
+					if(i == removeBox.getItemCount()-1) removeBox.addItem((Prof) profBox.getSelectedItem());
+				}
 			}
-
-			public void mousePressed(MouseEvent e) {
+		});
+		addRoomButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				addBlocks(((Room) roomBox.getSelectedItem()).getMeetings());
+				if(removeBox.getSelectedItem() instanceof String){
+					removeBox.removeItem(removeBox.getSelectedItem());
+				}
+				if(removeBox.getItemCount() == 0){
+					removeBox.addItem((Room) roomBox.getSelectedItem());
+				}
+				for(int i=0; i<removeBox.getItemCount(); i++){
+					if(roomBox.getSelectedItem().equals(removeBox.getItemAt(i))) break;
+					if(i == removeBox.getItemCount()-1) removeBox.addItem((Room) roomBox.getSelectedItem());
+				}
 			}
-
-			public void mouseReleased(MouseEvent e) {
+		});
+		removeButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if(removeBox.getSelectedItem() instanceof Course){
+					removeBlocks(((Course) removeBox.getSelectedItem()).getMeetings());
+				}
+				else if(removeBox.getSelectedItem() instanceof Prof){
+					removeBlocks(((Prof) removeBox.getSelectedItem()).getMeetings());
+				}
+				else if(removeBox.getSelectedItem() instanceof Room){
+					removeBlocks(((Room) removeBox.getSelectedItem()).getMeetings());
+				}
+				removeBox.removeItem(removeBox.getSelectedItem());
+				for(int i=0; i<removeBox.getItemCount(); i++){
+					if(removeBox.getItemAt(i) instanceof Course){
+						addBlocks(((Course) removeBox.getItemAt(i)).getMeetings());
+					}
+					if(removeBox.getItemAt(i) instanceof Prof){
+						addBlocks(((Prof) removeBox.getItemAt(i)).getMeetings());
+					}
+					if(removeBox.getItemAt(i) instanceof Room){
+						addBlocks(((Room) removeBox.getItemAt(i)).getMeetings());
+					}
+				}
 			}
-
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			public void mouseExited(MouseEvent e) {
-			}
-
-		}
-
-	}
-	
-	private void shiftAllUp(int a){
-		for(int i=a; i<removeButtons.size(); i++){
-			removeButtons.get(i).shiftUp();
-		}
+		});
 	}
 }
 }
-
-
-
