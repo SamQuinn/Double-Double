@@ -20,15 +20,15 @@ import java.io.*;
 public class Gui extends JFrame{
 
 	//JFrame Variables
-	private int width = 1100;
-	private int height = 600; //550
+	private int width = 1200;
+	private int height = 700; //550
 	private String title = "CPCS101 Final Project by Double-Double";
 	private Boolean resizable = true;
 	private int minWidth = 700;
 	private int minHeight = 350;
 
 	//Color Variables Array
-	private Color[]  colorArray= { Color.WHITE, Color.BLUE, Color.CYAN, Color.GREEN, 
+	private Color[]  colorArray= { Color.WHITE, Color.LIGHT_GRAY, Color.BLUE, Color.CYAN, Color.GREEN, 
     							Color.MAGENTA, Color.ORANGE, Color.PINK, Color.YELLOW, Color.RED };
 	
 	//Font variables
@@ -88,42 +88,36 @@ public class Gui extends JFrame{
 	//Backend Variables
 	private static File file;
 	private static MasterSchedule master;
-	
+	//background image
+	private JLabel background = new JLabel( new ImageIcon("Logo_Images/LogoBackground.jpeg") );
+	private ImageIcon icon = new ImageIcon("Logo_Images/LogoIconSize.jpeg");
 	
 
-	//Main method for running the program
-	public static void main( String[] args )
-	{	
-		file = new File("January 2017 First Draft.csv");
-		master = new MasterSchedule(file);
-		SwingUtilities.invokeLater( new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				new Gui();
-			}
-		});
-	}
-	
-	
+
 	//Constructor
-	public Gui()
+	public Gui( String filePath)
 	{	
+
+		file = new File( filePath );
+		master = new MasterSchedule( file );
+
 		//making the Panels
 		makePanels();
 		//calling the timetable panel
 		timeTable();
 		//makes the west panel
-		add(new WestPanel(master.getCourses(),master.getProfs(),master.getRooms()),BorderLayout.WEST);
+		this.add(new WestPanel(master.getCourses(),master.getProfs(),master.getRooms()),BorderLayout.WEST);
+
+		this.add( background );
 		
 		//JFrame Stuff
 		this.setTitle( title );
 		this.setResizable( resizable );
 		this.setSize( width, height );
 		this.setMinimumSize( new Dimension( minWidth, minHeight ) );
+		this.setLocation(100,100);
+		this.setIconImage( icon.getImage() );
 		this.setDefaultCloseOperation( this.EXIT_ON_CLOSE );
-		pack();
 		this.setVisible(true);
 	}
 	
@@ -135,7 +129,7 @@ public class Gui extends JFrame{
 	
 		//creates the content Panels which Holds ALL other Panels for the timetable
 		contentPanel = new JPanel( new BorderLayout() );
-		contentPanel.setBorder( BorderFactory.createLineBorder( colorArray[0], 2 ) );
+		contentPanel.setBorder( BorderFactory.createLineBorder( colorArray[1], 1 ) );
 		this.add( contentPanel, BorderLayout.CENTER );
 		
 		//This mainPanel is for the days of the week header and where the course info will go
@@ -161,17 +155,12 @@ public class Gui extends JFrame{
 		//for the stuff where courses go
 		timeTable = new JPanel();
 		timeTable.setLayout( new GridBagLayout() );
-		timeTable.setBackground( colorArray[0] );
+		//timeTable.setBackground( colorArray[4] );
 		mainPanel.add( timeTable, BorderLayout.CENTER );
 
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-
-		//the west Panel
-		wPanel = new JPanel( new BorderLayout() );
-		wPanel.setBorder( BorderFactory.createLineBorder( colorArray[0], 2 ) );
-		this.add( wPanel, BorderLayout.WEST );
 
 	}
 	
@@ -234,7 +223,7 @@ public class Gui extends JFrame{
 		daysOfWeek.add( fri );
 		daysOfWeek.add( sat );
 		daysOfWeek.add( sun );
-		
+
 		
 		
 		//------------------------------------------------------------------creating Time Labels and adding them to the times panel
@@ -386,6 +375,7 @@ public class Gui extends JFrame{
 				//repaint();
 			}
 		}
+
 	}
 
 		public void addBlocks(ArrayList<Meeting> a){
@@ -501,25 +491,37 @@ private class WestPanel extends JPanel{
 	JComboBox removeBox;
 	JButton removeButton;
 
+	//dimensions for stuff
+	private Dimension buttonD = new Dimension( 200, 20 );
+	private Dimension comboD = new Dimension( 400, 20 );
+
 
 
 	public WestPanel(Object[] a, Object[] b, Object[] c){
 		sl = new SpringLayout();
 		setLayout(sl);
-		
-
+	
 		courseBox = new JComboBox(a);
+		courseBox.setPreferredSize( comboD );
 		profBox = new JComboBox(b);
+		profBox.setPreferredSize( comboD );
 		roomBox = new JComboBox(c);
+		roomBox.setPreferredSize( comboD );
+
 		addCourseButton = new JButton("Add Course");
+		addCourseButton.setPreferredSize( buttonD );
 		addProfButton = new JButton("Add Prof");
+		addProfButton.setPreferredSize( buttonD );
 		addRoomButton = new JButton("Add Room");
+		addRoomButton.setPreferredSize( buttonD );
 
 		addedObjects = new ArrayList<Object>();
 		addedObjects.add("                     ");
 		removeBox = new JComboBox(addedObjects.toArray());
-		removeBox.setPreferredSize(new Dimension(200,20));
+		removeBox.setPreferredSize( comboD );
 		removeButton = new JButton("Remove");
+		removeButton.setPreferredSize( buttonD );
+
 
 		add(courseBox);
 		add(profBox);
@@ -530,17 +532,21 @@ private class WestPanel extends JPanel{
 		add(removeBox);
 		add(removeButton);
 
+
 		sl.putConstraint(SpringLayout.NORTH,courseBox,10,SpringLayout.NORTH,this);
 		sl.putConstraint(SpringLayout.WEST,courseBox,5,SpringLayout.WEST,this);
 		sl.putConstraint(SpringLayout.WEST,addCourseButton,5,SpringLayout.EAST,courseBox);
 		sl.putConstraint(SpringLayout.NORTH,addCourseButton,9,SpringLayout.NORTH,this);
+
 		sl.putConstraint(SpringLayout.NORTH,profBox,10,SpringLayout.SOUTH,courseBox);
 		sl.putConstraint(SpringLayout.WEST,profBox,5,SpringLayout.WEST,this);
 		sl.putConstraint(SpringLayout.WEST,addProfButton,5,SpringLayout.EAST,profBox);
 		sl.putConstraint(SpringLayout.NORTH,addProfButton,9,SpringLayout.SOUTH,courseBox);
+
 		sl.putConstraint(SpringLayout.NORTH,roomBox,10,SpringLayout.SOUTH,profBox);
 		sl.putConstraint(SpringLayout.WEST,roomBox,5,SpringLayout.WEST,this);
 		sl.putConstraint(SpringLayout.NORTH,addRoomButton,9,SpringLayout.SOUTH,profBox);
+
 		sl.putConstraint(SpringLayout.NORTH,removeBox,200,SpringLayout.SOUTH,roomBox);
 		sl.putConstraint(SpringLayout.NORTH,removeButton,200,SpringLayout.SOUTH,addRoomButton);
 		sl.putConstraint(SpringLayout.WEST,removeBox,5,SpringLayout.WEST,this);
@@ -555,13 +561,13 @@ private class WestPanel extends JPanel{
 
 	}
 
-	public void paintComponent(Graphics g){
+	/*public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
 
 		super.paintComponent(g2);
 		paintComponents(g2);
 
-	}
+	}*/
 
 	private void addButtonListeners(){
 		addCourseButton.addActionListener(new ActionListener(){

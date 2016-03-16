@@ -9,6 +9,7 @@ public class FileChooser extends JFrame
 	private JButton button;
 	private JLabel label;
 	private JLabel background;
+	private ImageIcon icon;
 	private JTextField jtf;
 
 	//Panels
@@ -33,6 +34,7 @@ public class FileChooser extends JFrame
 	{
 		//setting the layout
 		this.setLayout(new BorderLayout());
+		this.setTitle( "CPCS101 Final Project by Double-Double");
 
 		//initializing panels
 		logoPanel = new JPanel();
@@ -45,6 +47,9 @@ public class FileChooser extends JFrame
 
 		//creating the background label
 		background = new JLabel( new ImageIcon("Logo_Images/LogoPopUp2.jpeg") );
+		icon = new ImageIcon("Logo_Images/LogoIconSize.jpeg");
+
+
 
 		running = true;
 	}
@@ -70,6 +75,8 @@ public class FileChooser extends JFrame
 				filepath = jtf.getText();
 				setVisible( false );
 				running = false;
+
+				Gui gui = new Gui( getFilePath() );
 			}
 		});
 		
@@ -88,7 +95,7 @@ public class FileChooser extends JFrame
 		inputPanel.add( label, gbc );
 
 		//adding the textfield
-		jtf.setText( "January 2017 First Draft.csv" );
+		jtf.setText( "csvs/January 2017 First Draft.csv" );
 		jtf.setFont( reg );
 
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -117,6 +124,7 @@ public class FileChooser extends JFrame
 		logoPanel.add( background, BorderLayout.CENTER);
 		this.add(inputPanel, BorderLayout.SOUTH);
 		this.setSize( 550, 540 );
+		this.setIconImage(icon.getImage());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable( false );
 		this.setVisible(true);
