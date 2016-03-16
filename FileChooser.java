@@ -26,10 +26,6 @@ public class FileChooser extends JFrame
 	//file path string
 	private String filepath;
 
-	//for when running
-	private Boolean running = true;
-
-
 	public FileChooser()
 	{
 		//setting the layout
@@ -49,9 +45,6 @@ public class FileChooser extends JFrame
 		background = new JLabel( new ImageIcon("Logo_Images/LogoPopUp2.jpeg") );
 		icon = new ImageIcon("Logo_Images/LogoIconSize.jpeg");
 
-
-
-		running = true;
 	}
 
 
@@ -61,7 +54,7 @@ public class FileChooser extends JFrame
 		//panel for the button n stuff
 		inputPanel.setLayout( new GridBagLayout() );
 		inputPanel.setBackground( Color.WHITE );
-		inputPanel.setBorder( BorderFactory.createLineBorder( Color.GRAY, 4 ) );
+		inputPanel.setBorder( BorderFactory.createLineBorder( Color.GRAY, 1 ) );
 
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -74,7 +67,6 @@ public class FileChooser extends JFrame
 			{
 				filepath = jtf.getText();
 				setVisible( false );
-				running = false;
 
 				Gui gui = new Gui( getFilePath() );
 			}
@@ -123,10 +115,11 @@ public class FileChooser extends JFrame
 		this.add(logoPanel, BorderLayout.CENTER);
 		logoPanel.add( background, BorderLayout.CENTER);
 		this.add(inputPanel, BorderLayout.SOUTH);
-		this.setSize( 550, 540 );
+		//this.setSize( 545, 535 );
 		this.setIconImage(icon.getImage());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable( false );
+		pack();
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 	}
@@ -136,11 +129,6 @@ public class FileChooser extends JFrame
 	public String getFilePath()
 	{
 		return filepath;
-	}
-
-	public Boolean isRunning()
-	{
-		return running;
 	}
 	
 }

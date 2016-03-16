@@ -20,8 +20,8 @@ import java.io.*;
 public class Gui extends JFrame{
 
 	//JFrame Variables
-	private int width = 1200;
-	private int height = 700; //550
+	private int width = 1060;
+	private int height = 620; //550
 	private String title = "CPCS101 Final Project by Double-Double";
 	private Boolean resizable = true;
 	private int minWidth = 700;
@@ -84,7 +84,7 @@ public class Gui extends JFrame{
 	//dimensions for those labels
 	private JButton button;
 	private Dimension courseDim = new Dimension( 100, 20 );
-	private Dimension minCourseDim = new Dimension( 90, 20 );
+	private Dimension minCourseDim = new Dimension( 90, 2 );
 	//Backend Variables
 	private static File file;
 	private static MasterSchedule master;
@@ -108,15 +108,16 @@ public class Gui extends JFrame{
 		//makes the west panel
 		this.add(new WestPanel(master.getCourses(),master.getProfs(),master.getRooms()),BorderLayout.WEST);
 
-		this.add( background );
+		//this.add( background );
 		
 		//JFrame Stuff
 		this.setTitle( title );
 		this.setResizable( resizable );
 		this.setSize( width, height );
 		this.setMinimumSize( new Dimension( minWidth, minHeight ) );
-		this.setLocation(100,100);
+		this.setLocation(25,25);
 		this.setIconImage( icon.getImage() );
+		//setContentPane( background );
 		this.setDefaultCloseOperation( this.EXIT_ON_CLOSE );
 		this.setVisible(true);
 	}
@@ -129,33 +130,41 @@ public class Gui extends JFrame{
 	
 		//creates the content Panels which Holds ALL other Panels for the timetable
 		contentPanel = new JPanel( new BorderLayout() );
-		contentPanel.setBorder( BorderFactory.createLineBorder( colorArray[1], 1 ) );
+		contentPanel.add( background, BorderLayout.CENTER);
+		//contentPanel.setBackground( Color.RED );
+		contentPanel.setBorder( BorderFactory.createLineBorder( colorArray[0], 5 ) );
 		this.add( contentPanel, BorderLayout.CENTER );
 		
 		//This mainPanel is for the days of the week header and where the course info will go
 		mainPanel = new JPanel( new BorderLayout() );
-		//mainPanel.setBorder( BorderFactory.createLineBorder( colorArray[0], 2 ) );
+		//mainPanel.setOpaque(false);
 		contentPanel.add( mainPanel, BorderLayout.CENTER );
 
 		//creating the panel for the days of the week header ---> Horizontal BoxLayout
 		//also adds it to the mainPanel
 		daysOfWeek = new JPanel();
+		//daysOfWeek.setOpaque(false);
 		daysOfWeek.setLayout( new BoxLayout( daysOfWeek, BoxLayout.X_AXIS ) );
 		mainPanel.add( daysOfWeek, BorderLayout.NORTH );
 		
 		//creating stuff for the Times Column
 		// a temp Panel for formatting
 		temp = new JPanel( new BorderLayout() );
+		temp.setBackground( colorArray[0] );
+		//temp.setOpaque(false);
 		contentPanel.add( temp, BorderLayout.WEST );
 		//adds it to the main Panel
 		times = new JPanel();
+		//times.setOpaque(false);
 		times.setLayout( new GridLayout( 14, 1) );
 		temp.add( times, BorderLayout.CENTER );
 		
 		//for the stuff where courses go
 		timeTable = new JPanel();
 		timeTable.setLayout( new GridBagLayout() );
-		//timeTable.setBackground( colorArray[4] );
+		timeTable.setBackground( colorArray[0] );
+		//timeTable.setOpaque(false);
+
 		mainPanel.add( timeTable, BorderLayout.CENTER );
 
 		gbc = new GridBagConstraints();
@@ -492,8 +501,8 @@ private class WestPanel extends JPanel{
 	JButton removeButton;
 
 	//dimensions for stuff
-	private Dimension buttonD = new Dimension( 200, 20 );
-	private Dimension comboD = new Dimension( 400, 20 );
+	private Dimension buttonD = new Dimension( 120, 20 );
+	private Dimension comboD = new Dimension( 190, 20 );
 
 
 
@@ -503,25 +512,34 @@ private class WestPanel extends JPanel{
 	
 		courseBox = new JComboBox(a);
 		courseBox.setPreferredSize( comboD );
+		courseBox.setToolTipText("Select a Course");
 		profBox = new JComboBox(b);
 		profBox.setPreferredSize( comboD );
+		profBox.setToolTipText("Select a Professor");
 		roomBox = new JComboBox(c);
 		roomBox.setPreferredSize( comboD );
+		roomBox.setToolTipText("Select a Room");
 
 		addCourseButton = new JButton("Add Course");
+		addCourseButton.setToolTipText("Add selected course to timetable");
 		addCourseButton.setPreferredSize( buttonD );
 		addProfButton = new JButton("Add Prof");
+		addProfButton.setToolTipText("Add courses by selected Professor to timetable");
 		addProfButton.setPreferredSize( buttonD );
 		addRoomButton = new JButton("Add Room");
+		addRoomButton.setToolTipText("Add all course in selected room to timetable");
 		addRoomButton.setPreferredSize( buttonD );
 
 		addedObjects = new ArrayList<Object>();
 		addedObjects.add("                     ");
 		removeBox = new JComboBox(addedObjects.toArray());
+		removeBox.setToolTipText("Select a Professor, Room, or Course to be removed");
 		removeBox.setPreferredSize( comboD );
 		removeButton = new JButton("Remove");
+		removeButton.setToolTipText("Remove selected course from timetable");
 		removeButton.setPreferredSize( buttonD );
 
+		setBorder( BorderFactory.createLineBorder( Color.LIGHT_GRAY, 4 ) );
 
 		add(courseBox);
 		add(profBox);
@@ -533,10 +551,10 @@ private class WestPanel extends JPanel{
 		add(removeButton);
 
 
-		sl.putConstraint(SpringLayout.NORTH,courseBox,10,SpringLayout.NORTH,this);
+		sl.putConstraint(SpringLayout.NORTH,courseBox,40,SpringLayout.NORTH,this);
 		sl.putConstraint(SpringLayout.WEST,courseBox,5,SpringLayout.WEST,this);
 		sl.putConstraint(SpringLayout.WEST,addCourseButton,5,SpringLayout.EAST,courseBox);
-		sl.putConstraint(SpringLayout.NORTH,addCourseButton,9,SpringLayout.NORTH,this);
+		sl.putConstraint(SpringLayout.NORTH,addCourseButton,40,SpringLayout.NORTH,this);
 
 		sl.putConstraint(SpringLayout.NORTH,profBox,10,SpringLayout.SOUTH,courseBox);
 		sl.putConstraint(SpringLayout.WEST,profBox,5,SpringLayout.WEST,this);
@@ -561,13 +579,13 @@ private class WestPanel extends JPanel{
 
 	}
 
-	/*public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
 
 		super.paintComponent(g2);
 		paintComponents(g2);
 
-	}*/
+	}
 
 	private void addButtonListeners(){
 		addCourseButton.addActionListener(new ActionListener(){
