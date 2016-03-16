@@ -71,6 +71,9 @@ public class BlockLabel extends JLabel{
 
 	public void removeToolTipText(String a){
 		toolTipText = "";
+		for(int i=0; i<allToolTipText.size(); i++){
+			if(allToolTipText.get(i).equals(a)) allToolTipText.remove(i);
+		}
 		if(allToolTipText.size() > 0){
 			for(int i=0; i<allToolTipText.size(); i++){
 				if(i==0){
@@ -98,7 +101,7 @@ public class BlockLabel extends JLabel{
 			setBorder(BorderFactory.createLineBorder( Color.BLACK, 1 ));
 			setBackground(Color.WHITE);
 		}
-		else if(getBackground().equals(Color.RED) && allToolTipText.size() == 1){
+		else if(getBackground().equals(Color.RED) && allLabelText.size() <= 1){
 			setBorder(BorderFactory.createLineBorder( Color.CYAN, 1 ));
 			setBackground(Color.CYAN);
 		}
