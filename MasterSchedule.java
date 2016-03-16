@@ -43,7 +43,6 @@ public class MasterSchedule{
 		myLines = organizeCSV();
 		myMeetings = new ArrayList<Meeting>();
 		myCourses = courseCreator();
-		System.out.println(myLines.size() + "" + myMeetings.size());
 		myProfs = profCreator();
 		myRooms = roomCreator();
 
@@ -117,6 +116,7 @@ public class MasterSchedule{
 				}
 			}
 		}
+//		Collections.sort(profs);
 		return profs;
 	}
 
@@ -146,6 +146,7 @@ public class MasterSchedule{
 				}
 			}
 		}
+//		Collections.sort(rooms);
 		return rooms;
 	}
 
