@@ -132,7 +132,7 @@ public class Gui extends JFrame{
 		contentPanel = new JPanel( new BorderLayout() );
 		contentPanel.add( background, BorderLayout.CENTER);
 		//contentPanel.setBackground( Color.RED );
-		contentPanel.setBorder( BorderFactory.createLineBorder( colorArray[0], 5 ) );
+		contentPanel.setBorder( BorderFactory.createLoweredBevelBorder() );
 		this.add( contentPanel, BorderLayout.CENTER );
 		
 		//This mainPanel is for the days of the week header and where the course info will go
@@ -143,7 +143,7 @@ public class Gui extends JFrame{
 		//creating the panel for the days of the week header ---> Horizontal BoxLayout
 		//also adds it to the mainPanel
 		daysOfWeek = new JPanel();
-		//daysOfWeek.setOpaque(false);
+		//daysOfWeek.setBackground( colorArray[1] );
 		daysOfWeek.setLayout( new BoxLayout( daysOfWeek, BoxLayout.X_AXIS ) );
 		mainPanel.add( daysOfWeek, BorderLayout.NORTH );
 		
@@ -155,7 +155,7 @@ public class Gui extends JFrame{
 		contentPanel.add( temp, BorderLayout.WEST );
 		//adds it to the main Panel
 		times = new JPanel();
-		//times.setOpaque(false);
+		//times.setBackground( colorArray[1] );
 		times.setLayout( new GridLayout( 14, 1) );
 		temp.add( times, BorderLayout.CENTER );
 		
@@ -539,7 +539,7 @@ private class WestPanel extends JPanel{
 		removeButton.setToolTipText("Remove selected course from timetable");
 		removeButton.setPreferredSize( buttonD );
 
-		setBorder( BorderFactory.createLineBorder( Color.LIGHT_GRAY, 4 ) );
+		setBorder( BorderFactory.createLoweredBevelBorder() );
 
 		add(courseBox);
 		add(profBox);

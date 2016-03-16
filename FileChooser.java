@@ -25,6 +25,7 @@ public class FileChooser extends JFrame
 
 	//file path string
 	private String filepath;
+	private Gui gui;
 
 	public FileChooser()
 	{
@@ -54,7 +55,9 @@ public class FileChooser extends JFrame
 		//panel for the button n stuff
 		inputPanel.setLayout( new GridBagLayout() );
 		inputPanel.setBackground( Color.WHITE );
-		inputPanel.setBorder( BorderFactory.createLineBorder( Color.GRAY, 1 ) );
+		//inputPanel.setBorder( BorderFactory.createLineBorder( Color.GRAY, 1 ) );
+		inputPanel.setBorder( BorderFactory.createLoweredBevelBorder() );
+		logoPanel.setBorder( BorderFactory.createLoweredBevelBorder() );
 
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -68,7 +71,7 @@ public class FileChooser extends JFrame
 				filepath = jtf.getText();
 				setVisible( false );
 
-				Gui gui = new Gui( getFilePath() );
+				gui = new Gui( getFilePath() );
 			}
 		});
 		
