@@ -1,65 +1,138 @@
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 
-public class FileChooser extends JFrame{
-	JButton jbt1;
-	JButton jbt2;
-	JTextField jtf;
+public class FileChooser extends JFrame
+{
+	//class variables
+	//components
+	private JButton button;
+	private JLabel label;
+	private JLabel background;
+	private JTextField jtf;
+
+	//Panels
+	private JPanel logoPanel;
+	private JPanel inputPanel;
+
+	//grid bag stuff
+	private GridBagConstraints gbc;
+
+	//Font variables
+	private Font labelFont = new Font( "Monospace", Font.BOLD, 14);
+	private Font reg = new Font( "Monospace", Font.BOLD, 12);
+
+	//file path string
 	private String filepath;
-	
-	public FileChooser(){
-		setLayout(new BorderLayout());
-		jtf = new JTextField(10);
-		jbt1 = new JButton("Select");
-		jbt2 = new JButton("Clear");
-		JPanel inputPanel = new JPanel();
-		JPanel logoPanel = new JPanel(); // you can put the logo here.
-		jbt1.addActionListener(new ActionListener(){
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
+	//for when running
+	private Boolean running = true;
+
+
+	public FileChooser()
+	{
+		//setting the layout
+		this.setLayout(new BorderLayout());
+
+		//initializing panels
+		logoPanel = new JPanel();
+		inputPanel = new JPanel();
+
+		//creating the label
+		label =  new JLabel();
+		jtf = new JTextField();
+		button = new JButton();
+
+		//creating the background label
+		background = new JLabel( new ImageIcon("Logo_Images/LogoPopUp2.jpeg") );
+
+		running = true;
+	}
+
+
+	public void runFileChooser()
+	{
+
+		//panel for the button n stuff
+		inputPanel.setLayout( new GridBagLayout() );
+		inputPanel.setBackground( Color.WHITE );
+		inputPanel.setBorder( BorderFactory.createLineBorder( Color.GRAY, 4 ) );
+
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+
+		//adding a actionlistener to the button
+		button.addActionListener(new ActionListener()
+		{
+			@Override public void actionPerformed(ActionEvent e) 
+			{
 				filepath = jtf.getText();
-				
+				setVisible( false );
+				running = false;
 			}
-			
 		});
-		jbt2.addActionListener(new ActionListener(){
+		
+		//adding the label
+		label.setText( "ENTER FILE PATH:  " );
+		label.setFont( labelFont );
+		label.setHorizontalAlignment( SwingConstants.RIGHT );
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				jtf.setText("");
-				
-			}
-			
-		});
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets( 8, 0, 0, 0 );
+		gbc.weightx = 0.5;
+		gbc.weighty = 0.5;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+
+		inputPanel.add( label, gbc );
+
+		//adding the textfield
+		jtf.setText( "January 2017 First Draft.csv" );
+		jtf.setFont( reg );
+
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.weightx = 0.5;
+		gbc.weighty = 0.5;
+		gbc.insets = new Insets( 8, 0, 0, 8 );
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+
+		inputPanel.add(jtf, gbc);
+
+		//adding the button
+		button.setText( "Start" );
+
+		gbc.anchor = GridBagConstraints.LAST_LINE_END;
+		gbc.weightx = 0.5;
+		gbc.weighty = 0.0;
+		gbc.insets = new Insets( 15, 150, 8, 8 );
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+
+		inputPanel.add(button, gbc);
 		
-		Label label =  new Label("Please type the file path:");
-		
-		inputPanel.setLayout(new GridLayout(2,2));
-		inputPanel.add(label);
-		inputPanel.add(jbt1);
-		inputPanel.add(jtf);
-		inputPanel.add(jbt2);
-		
-		this.add(logoPanel,BorderLayout.CENTER);
+		//JFrame stuff
+		this.add(logoPanel, BorderLayout.CENTER);
+		logoPanel.add( background, BorderLayout.CENTER);
 		this.add(inputPanel, BorderLayout.SOUTH);
-		this.setSize(400,400);
+		this.setSize( 550, 540 );
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setResizable( false );
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
-		
 	}
 	
-	public String getFilePath(){
+
+
+	public String getFilePath()
+	{
 		return filepath;
 	}
-	
-	public static void main(String[] args) {
-		new FileChooser();
-	}
 
+	public Boolean isRunning()
+	{
+		return running;
+	}
+	
 }
