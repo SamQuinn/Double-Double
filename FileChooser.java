@@ -9,10 +9,8 @@ public class FileChooser extends JFrame
 	//class variables
 	//components
 	private JButton button;
-	private JLabel label;
 	private JLabel background;
 	private ImageIcon icon;
-	private JTextField jtf;
 
 	//Panels
 	private JPanel logoPanel;
@@ -20,13 +18,7 @@ public class FileChooser extends JFrame
 
 	//grid bag stuff
 	private GridBagConstraints gbc;
-
-	//Font variables
-	private Font labelFont = new Font( "Monospace", Font.BOLD, 14);
-	private Font reg = new Font( "Monospace", Font.BOLD, 12);
-
-	//file path string
-	private String filepath;
+	
 	private Gui gui;
 
 	public FileChooser()
@@ -38,11 +30,7 @@ public class FileChooser extends JFrame
 		//initializing panels
 		logoPanel = new JPanel();
 		inputPanel = new JPanel();
-
-		//creating the label
-		label =  new JLabel();
-		jtf = new JTextField();
-		button = new JButton();
+		button = new JButton("Choose File");
 
 		//creating the background label
 		background = new JLabel( new ImageIcon("Logo_Images/LogoPopUp2.jpeg") );
@@ -69,62 +57,31 @@ public class FileChooser extends JFrame
 		button.addActionListener(new ActionListener()
 		{
 			@Override public void actionPerformed(ActionEvent e) 
-			{
-				filepath = jtf.getText();
-				boolean fileWorks = true;
-				try{
-					File file = new File(getFilePath());
-					Scanner sc = new Scanner(file);
-				}catch(FileNotFoundException f){
-					fileWorks = false;
-				}
-				if(fileWorks){
-					setVisible( false );
+			{			
+				JFileChooser fc = new JFileChooser();
 
-					gui = new Gui( getFilePath() );
-				}
-				else setFilePathText("File Path Incorrect");
+				fc.setAcceptAllFileFilterUsed(false);
+				fc.addChoosableFileFilter(new CSVFilter());
+
+				int returnValue = fc.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fc.getSelectedFile();
+					boolean fileWorks = true;
+					try{
+						Scanner sc = new Scanner(selectedFile);
+					}catch(FileNotFoundException f){
+						fileWorks = false;
+					}
+					if(fileWorks){
+						setVisible( false );
+
+						gui = new Gui(selectedFile);
+					}
+				}	
 			}
 		});
-		
-		//adding the label
-		label.setText( "ENTER FILE PATH:  " );
-		label.setFont( labelFont );
-		label.setHorizontalAlignment( SwingConstants.RIGHT );
 
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets( 8, 0, 0, 0 );
-		gbc.weightx = 0.5;
-		gbc.weighty = 0.5;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-
-		inputPanel.add( label, gbc );
-
-		//adding the textfield
-		jtf.setText( "csvs/January 2017 First Draft.csv" );
-		jtf.setFont( reg );
-
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.weightx = 0.5;
-		gbc.weighty = 0.5;
-		gbc.insets = new Insets( 8, 0, 0, 8 );
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-
-		inputPanel.add(jtf, gbc);
-
-		//adding the button
-		button.setText( "Start" );
-
-		gbc.anchor = GridBagConstraints.LAST_LINE_END;
-		gbc.weightx = 0.5;
-		gbc.weighty = 0.0;
-		gbc.insets = new Insets( 15, 150, 8, 8 );
-		gbc.gridx = 2;
-		gbc.gridy = 1;
-
-		inputPanel.add(button, gbc);
+		inputPanel.add(button);
 		
 		//JFrame stuff
 		this.add(logoPanel, BorderLayout.CENTER);
@@ -137,17 +94,6 @@ public class FileChooser extends JFrame
 		pack();
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
-	}
-	
-
-
-	public String getFilePath()
-	{
-		return filepath;
-	}
-
-	private void setFilePathText(String a){
-		jtf.setText(a);
 	}
 	
 }
