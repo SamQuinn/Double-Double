@@ -4,8 +4,8 @@
 * the GUI for CPSC101 final project
 *
 *
-*@author Scott Howes
-*@version 03/13/2016
+*@author Scott Howes, updated by Sam Kelly
+*@version 04/04/2016
 *
 */
 
@@ -95,11 +95,9 @@ public class Gui extends JFrame{
 
 
 	//Constructor
-	public Gui( String filePath)
+	public Gui(File selectedFile)
 	{	
-
-		file = new File( filePath );
-		master = new MasterSchedule( file );
+		master = new MasterSchedule( selectedFile );
 
 		//making the Panels
 		makePanels();
