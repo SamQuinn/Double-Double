@@ -3,7 +3,7 @@
  * @author Ray
  * @version 1.0
  */
-
+//comment
 import java.text.DecimalFormat;
 
 public class MeetingTime {
